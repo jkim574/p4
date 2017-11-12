@@ -14,7 +14,7 @@ public interface StackADT<T> {
 	boolean isEmpty();
 
     /**
-     * Add the data item to top of the Stack.
+     * Add the data item to top \of the Stack.
      * If data is null, throw IllegalArgumentException
      */
 	void push(T data) throws IllegalArgumentException;

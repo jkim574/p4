@@ -1,22 +1,27 @@
-import java.util.EmptyStackException;
+import java.util.*;
+
 
 public class Stack<T> implements StackADT<T> {
 
-    private static final int INITSIZE = 10; //initial array size
-    private T[] items; // the items in the stack
-    private int numItems; // the number of items in the stack
+    private int size;
+    private Node first;
+
+    private class Node {
+	private T item;
+	private Node next;
+    }
 
     /**
      * Constructor
      */
     public Stack() {
-	items = (T[]) new Object[INITSIZE];
-	numItems = 0;
+	first = null;
+	size = 0;
     }
 
     /** return true if this Stack is empty */
     public boolean isEmpty() {
-	if (numItems == 0) {
+	if (first == null) {
 	    return true;
 	} else {
 	    return false;
@@ -31,15 +36,11 @@ public class Stack<T> implements StackADT<T> {
 	if (item == null) {
 	    throw new IllegalArgumentException();
 	}
-	if (items.length == numItems) {
-	    T[] copy = (T[]) new Object[2 * items.length];
-	    for (int i = 0; i < numItems; i++) {
-		copy[i] = items[i];
-	    }
-	    items = copy;
-	}
-	items[numItems] = item;
-	numItems++;
+	Node oldFirst = first;
+	first = new Node();
+	first.item = item;
+	first.next = oldFirst;
+	size++;
     }
 
     /**
@@ -49,10 +50,8 @@ public class Stack<T> implements StackADT<T> {
      * If the stack is empty, throws java.util.EmptyStackException
      */
     public T peek() throws EmptyStackException {
-	if (numItems == 0) {
-	    throw new EmptyStackException();
-	}
-	return items[numItems - 1];
+	if (isEmpty()) throw new EmptyStackException();
+	return first.item;
     }
 
     /**
@@ -61,20 +60,15 @@ public class Stack<T> implements StackADT<T> {
      * If the stack is empty, throws java.util.EmptyStackException
      */
     public T pop() throws EmptyStackException {
-	if (numItems == 0) {
+	if (isEmpty()) {
 	    throw new EmptyStackException();
 	} else {
-	    numItems--;
-	    return items[numItems];
+	    T item = first.item;
+	    first = first.next;
+	    size--;
+	    return item;
 	}
 
-    }
-
-    //Test
-    public void display() {
-	for (T num : items) {
-	    System.out.println(num);
-	}
     }
 
     public StackADT<T> reverse() {

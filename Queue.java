@@ -1,16 +1,19 @@
+import java.util.*;
+
 public class Queue<T> implements QueueADT<T> {
 
-    private static final int INITSIZE = 10;  // initial array size
-    private T[] items; // the items in the queue
-    private int numItems;   // the number of items in the queue
-    private int frontIndex;
-    private int rearIndex;
+    private Node front, rear; //begin and end nodes
+    private int size; // number of items
+
+    private class Node {
+	private T item;
+	private Node next;
+    }
 
     public Queue() {
-	items = (T[]) new Object[INITSIZE];
-	numItems = 0;
-	frontIndex = 0;
-	rearIndex = 0;
+	front = null;
+	rear = null;
+	size = 0;
     }
 
 
@@ -18,7 +21,7 @@ public class Queue<T> implements QueueADT<T> {
      * Return true if the Queue is empty
      */
     public boolean isEmpty() {
-	if (numItems == 0) {
+	if (size == 0) {
 	    return true;
 	} else {
 	    return false;
@@ -33,33 +36,15 @@ public class Queue<T> implements QueueADT<T> {
 	if (data == null) {
 	    throw new IllegalArgumentException();
 	}
-	if (items.length == numItems) {
-	    T[] copy = (T[]) new Object[items.length * 2];
-	    System.arraycopy(items, frontIndex, copy, frontIndex, items.length - frontIndex);
-	    if (frontIndex != 0) {
-		System.arraycopy (items, 0 , copy, items.length, frontIndex);
-	    }
-	    items = copy;
-	    rearIndex = frontIndex + numItems - 1;
+	Node oldRear = rear;
+	rear = new Node();
+	rear.next = null;
+	if (isEmpty()) {
+	    front = rear;
+	} else {
+	    oldRear.next = rear;
 	}
-	rearIndex = incrementIndex(rearIndex);
-	items[rearIndex] = data;
-	numItems++;
-    }
-
-    /**
-     * Increase the index by one, and set the index to 0 if the index is at the
-     * last index of the array
-     *
-     * @param index
-     * @return the result number after the increase
-     */
-    private int incrementIndex(int index) {
-	if (index == items.length - 1)
-	    return 0;
-	else {
-	    return index + 1;
-	}
+	size++;
     }
 
 
@@ -69,14 +54,16 @@ public class Queue<T> implements QueueADT<T> {
      * If queue is empty, throw EmptyQueueException
      */
     public T dequeue() throws EmptyQueueException {
-	if (numItems == 0) {
+	if (size == 0) {
 	    throw new EmptyQueueException();
 	}
-	T copy = items[frontIndex];
-	numItems--;
-	frontIndex = incrementIndex(frontIndex);
-    	return copy;
-
+	T item = front.item;
+	front = front.next;
+	if (isEmpty()) {
+	    rear = null;
+	}
+	size--;
+	return item;
     }
 
     /**
@@ -85,19 +72,12 @@ public class Queue<T> implements QueueADT<T> {
      * If queue is empty, throw EmptyQueueException
      */
     public T element() throws EmptyQueueException {
-	if (numItems == 0) {
+	if (size == 0) {
 	    throw new EmptyQueueException();
 	}
-	return items[numItems - 1];
+	T item = front.item;
+	front = front.next;
+	return item;
     }
-
-
-      //Test
-    public void display() {
-	for (T num : items) {
-	    System.out.println(num);
-	}
-    }
-
 
 }

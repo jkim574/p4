@@ -2,12 +2,13 @@ import java.util.*;
 
 public class Queue<T> implements QueueADT<T> {
 
-    private Node front, rear; //begin and end nodes
+    private Node<T> front, rear; //begin and end nodes
     private int size; // number of items
 
-    private class Node {
+    private class Node<T> {
 	private T item;
-	private Node next;
+	private Node<T> next;
+
     }
 
     public Queue() {
@@ -36,8 +37,9 @@ public class Queue<T> implements QueueADT<T> {
 	if (data == null) {
 	    throw new IllegalArgumentException();
 	}
-	Node oldRear = rear;
-	rear = new Node();
+	Node<T> oldRear = rear;
+	rear = new Node<T>();
+	rear.item = data;
 	rear.next = null;
 	if (isEmpty()) {
 	    front = rear;
@@ -75,9 +77,7 @@ public class Queue<T> implements QueueADT<T> {
 	if (size == 0) {
 	    throw new EmptyQueueException();
 	}
-	T item = front.item;
-	front = front.next;
-	return item;
+	return front.item;
     }
 
 }

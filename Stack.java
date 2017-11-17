@@ -71,8 +71,24 @@ public class Stack<T> implements StackADT<T> {
 
     }
 
+    /**
+     * Creates a new Stack with the items of this stack
+     * in the reverse order.
+     * The items in this stack remain the same order.
+     *
+     * If this stack is empty, the reverse order stack is also empty.
+     */
     public StackADT<T> reverse() {
-	return null;
+	Stack newStack = new Stack();
+	if (!isEmpty()) {
+	    Node oldFirst = first;
+	    while(oldFirst != null) {
+		push(oldFirst);
+		oldFirst =
+	    }
+
+	}
+	return newStack;
     }
 
 

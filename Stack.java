@@ -3,29 +3,18 @@ import java.util.*;
 
 public class Stack<T> implements StackADT<T> {
 
-    private int size;
-    private Node first;
-
-    private class Node {
-	private T item;
-	private Node next;
-    }
+    private LinkedList<T> items;
 
     /**
      * Constructor
      */
     public Stack() {
-	first = null;
-	size = 0;
+	items = new LinkedList<T>();
     }
 
     /** return true if this Stack is empty */
     public boolean isEmpty() {
-	if (first == null) {
-	    return true;
-	} else {
-	    return false;
-	}
+	return items.isEmpty();
     }
 
     /**
@@ -36,11 +25,7 @@ public class Stack<T> implements StackADT<T> {
 	if (item == null) {
 	    throw new IllegalArgumentException();
 	}
-	Node oldFirst = first;
-	first = new Node();
-	first.item = item;
-	first.next = oldFirst;
-	size++;
+	items.add(0, item);
     }
 
     /**
@@ -50,8 +35,8 @@ public class Stack<T> implements StackADT<T> {
      * If the stack is empty, throws java.util.EmptyStackException
      */
     public T peek() throws EmptyStackException {
-	if (isEmpty()) throw new EmptyStackException();
-	return first.item;
+	if (this.isEmpty()) throw new EmptyStackException();
+	return items.get(0);
     }
 
     /**
@@ -60,15 +45,9 @@ public class Stack<T> implements StackADT<T> {
      * If the stack is empty, throws java.util.EmptyStackException
      */
     public T pop() throws EmptyStackException {
-	if (isEmpty()) {
+	if (this.isEmpty()) {
 	    throw new EmptyStackException();
-	} else {
-	    T item = first.item;
-	    first = first.next;
-	    size--;
-	    return item;
-	}
-
+	} return items.remove(0);
     }
 
     /**
@@ -79,18 +58,10 @@ public class Stack<T> implements StackADT<T> {
      * If this stack is empty, the reverse order stack is also empty.
      */
     public StackADT<T> reverse() {
-	Stack newStack = new Stack();
-	if (!isEmpty()) {
-	    Node oldFirst = first;
-	    while(oldFirst != null) {
-		push(oldFirst);
-		oldFirst =
-	    }
-
+	StackADT<T> newStack = new Stack<T>();
+	while (!this.isEmpty()) {
+	    newStack.push(this.pop());
 	}
 	return newStack;
     }
-
-
-
 }

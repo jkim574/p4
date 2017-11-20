@@ -69,39 +69,31 @@ public class GenealogyTree{
 	 * or an empty stack if target is not found
 	 */
 	private StackADT<String> getAncestorStack(StackADT<String> st, TreeNode<String> curr, String target) {
-		// TODO: must implement this method
+	    // TODO: must implement this method
 	    if (curr != null) {
-	        st.push(curr);
-		if (st.peek().equals(children)) {
+		// push to stack
+	        st.push(curr.getData());
+		// check for match
+		// if curr matches target return stack
+		if (st.peek().equals(target)) {
 		    return st;
-		} else {
-		    root.getChildren();
 		}
-		for (String cur : st) {
-		    root.getChildren();
-		    if (root.getData().equals(target)) {
-			return st;
-		    } else {
-			st.pop();
-		    }
+		// otherwise, iterate through children
+		// for each child
+		for (TreeNode<String> child : curr.getChildren()) {
+		    // get the ancestor stack for that child
+		    StackADT<String> as = getAncestorStack(st, child, target);
+		    // if top of ancestry stack equals target
+		    // return stack
+		    if (as.peek().equals(target))
+			return as;
 		}
-
-	    } return st;
+		// otherwise, pop the top from the stack
+		st.pop();
+	    }
+	    // return stack if done processing ch
+	    return st;
 	}
-		// if current node is not null
-			// push to stack
-			// check for match
-				// if curr matches target return stack
-
-			// otherwise, iterate through children
-			// for each child
-				// get the ancestor stack for that child
-
-				// if top of ancestry stack equals target
-					// return stack
-				// otherwise, pop the top from the stack
-
-		// return stack if done processing ch
 
 
 	/**
@@ -160,104 +152,101 @@ public class GenealogyTree{
 	 *	// close the file scanner
 	 *
 	 */
-	public void buildFromFile(String filename) throws IOException{
+    public void buildFromFile(String filename) throws IOException{
         // TODO: COMPLETE THIS METHOD
-	    QueueADT<String> queue = new QueueADT<String>();
-	    String line;
-	    String[] parts;
-	    for (String s : queue) {
-		Scanner sc = new Scanner(filename);
-		while (sc.hasNext()) {
-		    line = sc.nextLine();
-		    line = line.trim();
-		    try {
-			for (String d : parts) {
-
-			}
-			if (root == null) {
-			    root.addChild(line);
-			    queue.enqueue(data);
-
+	Queue<TreeNode<String>> queue = new Queue<TreeNode<String>>();
+	// create a Scanner connect to the file
+	File file = new File(filename);
+	try {
+	    Scanner sc = new Scanner(file);
+	    // for each line of the file
+	    while (sc.hasNextLine()) {
+		// read the line
+		String line = sc.nextLine();
+		// parse the line into parent and child
+		String[] parts = line.split(" -> ");
+		String parent = parts[0];
+		String child = parts[1];
+		// if root is null
+		if (root == null) {
+		    // create the root
+		    root = new TreeNode<String>(parent);
+		    // add its first child
+		    TreeNode<String> childnode = new TreeNode<String>(child);
+		    root.addChild(childnode);
+		    // add the root and child to the queue
+		    queue.enqueue(root);
+		    queue.enqueue(childnode);
+		} else {
+		    // else Construct other TreeNode
+		    // while queue is not empty
+		    while (!queue.isEmpty()) {
+			// get next node from queue without removing it from queue
+			TreeNode<String> front = queue.element();
+			// if "front" node matches the parent
+			if (front.getData().equals(parent)) {
+			    // create a TreeNode for the child
+			    TreeNode<String> childnode = new TreeNode<String>(child);
+			    // add the child node to the current "front" node (its parent)
+			    front.addChild(childnode);
+			    // add the child to the queue
+			    queue.enqueue(childnode);
+			    // break out of the loop
+			    break;
 			} else {
-			    //	    TreeNode<T>
-				}
-		    } catch (IOException e) {
-			System.out.println(LOAD_GENEALOGY_ERROR_MESSAGE);
+			    // else dequeue the front node
+			    queue.dequeue();
+			}
 		    }
-		    sc.close();
 		}
 	    }
-		// Create a queue, add each new node to the queue
-			// create a Scanner connect to the file
-
-			// for each line of the file
-
-				// read the line
-
-				// parse the line into parent and child
-
-				// if root is null
-
-					// create the root
-
-					// add its first child
-
-					// add the root and child to the queue
-
-				// else Construct other TreeNode
-
-					// while queue is not empty
-
-						// get next node from queue without removing it from queue
-
-						// if "front" node matches the parent
-
-							// create a TreeNode for the child
-
-							// add the child node to the current "front" node (its parent)
-
-							// add the child to the queue
-
-							// break out of the loop
-
-						// else dequeue the front node
-
-			// catch IO exceptions, display error message and rethrow the exception
-
-			// close the file scanner
+	    sc.close();
+	} catch (IOException e) {
+	    // catch IO exceptions, display error message and rethrow the exception
+	    System.out.println(LOAD_GENEALOGY_ERROR_MESSAGE);
+	    throw e;
 	}
+    }
 
-	/**
-	 * Display the contents of the tree in a horizontal tree form.
-	 *
-	 * This method is a private recursive helper method for the
-	 * printTree() method.
-	 *
-	 * It uses the indentation levels to indicate how many
-	 * dots (two per each level) to print for the node
-	 *
-	 * @param current node to print
-	 * @param indent_count indicates how many dots .. to print for the current level
-	 * @param indent_str indicates string of characters precede each print level
-	 */
-	private void printTreeWithIndent(TreeNode<String> current, int indent_count, String indent_str){
-        // TODO: COMPLETE THIS METHOD
 
+    /**
+     * Display the contents of the tree in a horizontal tree form.
+     *
+     * This method is a private recursive helper method for the
+     * printTree() method.
+     *
+     * It uses the indentation levels to indicate how many
+     * dots (two per each level) to print for the node
+     *
+     * @param current node to print
+     * @param indent_count indicates how many dots .. to print for the current level
+     * @param indent_str indicates string of characters precede each print level
+     */
+    private void printTreeWithIndent(TreeNode<String> current, int indent_count, String indent_str){
+	// TODO: COMPLETE THIS METHOD
+	int count = 0;
+	while (count++ < indent_count) {
+	    System.out.print(indent_str);
 	}
+	System.out.println(current.getData());
+	for (TreeNode<String> child : current.getChildren()) {
+	    printTreeWithIndent(child, indent_count + 1, indent_str);
+	}
+    }
 
-	/**
-	 * Print a tree with indent.
-	 *
-	 * You should use pre-order to print a tree, which means:
-	 * (1) Print the data at current node
-	 * (2) For all children nodes of current node,
-	 *       recursively use pre-order to print children nodes.
-	 *
-	 * Each line of output represents a node, use indent (number of spaces before node data)
-	 * to indicate which level the current node belongs to.
-	 * For root node (at level 0), use 0 spaces.
-	 * For nodes at other levels, add 2 spaces of indent each level.
-	 *
+    /**
+     * Print a tree with indent.
+     *
+     * You should use pre-order to print a tree, which means:
+     * (1) Print the data at current node
+     * (2) For all children nodes of current node,
+     *       recursively use pre-order to print children nodes.
+     *
+     * Each line of output represents a node, use indent (number of spaces before node data)
+     * to indicate which level the current node belongs to.
+     * For root node (at level 0), use 0 spaces.
+     * For nodes at other levels, add 2 spaces of indent each level.
+     *
 	 * Like for the following tree:
 	 *     a
 	 *  /  |  \

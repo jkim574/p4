@@ -1,21 +1,21 @@
 import java.util.*;
 
 /**
- * The main program (class) for determining the 
+ * The main program (class) for determining the
  * closest (lowest) common ancestor for a pair of researchers.
- * 
+ *
  * A file with the parent-&gt;child (professor-&gt;student) relationship
  * is read and used to build a GenealogyTree of the relationships.
- * 
+ *
  * That tree is then used to find the closest common ancestor.
- * 
+ *
  * Required classes include:
  * LinkedList that implements ListADT
  * Stack that implements StackADT (with a reverse method)
  * Queue that implements QueueADT
  * EmptyQueueException
  * GenealogyTree class that used TreeNode objects
- * 
+ *
  */
 public class Ancestor{
 
@@ -39,15 +39,15 @@ public class Ancestor{
 
 
     /**
-     * Given two names, return the lowest common ancestor 
+     * Given two names, return the lowest common ancestor
      * as found in the GenealogyTree.
      *
      *<pre>
-     * (1) If name does not exist in GenealogyTree, 
+     * (1) If name does not exist in GenealogyTree,
      *     print NAME_NOT_FOUND_MESSAGE
      *     and the corresponding name, like "Can not find name: leonhard_euler"
      *
-     * (2) If both names are not found in GenealogyTree, 
+     * (2) If both names are not found in GenealogyTree,
      *     do step (1) for both name1 and name2.
      *
      * (3) If common ancestor does not exist, return null.
@@ -58,25 +58,47 @@ public class Ancestor{
      * @return the name of the closest (lowest level) common ancestor researcher
      */
     public String lowestCommonAncestor(String name1, String name2){
-        // TODO: COMPLETE THIS METHOD
-    	
-    	// Get the ancestors of each name
+	StackADT<String> as1 = g.getAncestorStack(name1);
+        StackADT<String> as2 = g.getAncestorStack(name2);
 
     	// display not found messages if appropriate
-    	
+        if (as1.isEmpty())
+            System.out.println(NAME_NOT_FOUND_MESSAGE + name1);
+        if (as2.isEmpty())
+            System.out.println(NAME_NOT_FOUND_MESSAGE + name2);
+
     	// return null if either stack is empy
+        if (as1.isEmpty() || as2.isEmpty())
+            return null;
 
         // if neither stack is empty
         // reverse both stacks so that the ancestors can be compared
+        StackADT<String> as1_rev = as1.reverse();
+        StackADT<String> as2_rev = as2.reverse();
 
         // Return the lowest level name in the tree
-    	// that is an ancestor of both of the specified 
+    	// that is an ancestor of both of the specified
     	// researcher names.
-    	
+        String ancestor1 = as1_rev.pop();
+        String ancestor2 = as2_rev.pop();
+        String ans_prev = ancestor1;
+        while (ancestor1.equals(ancestor2)) {
+            ans_prev = ancestor1;
+            if (as1_rev.isEmpty() || as2_rev.isEmpty())
+                break;
+            ancestor1 = as1_rev.pop();
+            ancestor2 = as2_rev.pop();
+        }
+
     	// return the common researcher
+        String lowest_common_ancestor = ans_prev;
+        return lowest_common_ancestor;
     }
 
-    /** 
+
+
+
+    /**
      * Handles the main menu loop's check operation.
      * DO NOT CHANGE THIS METHOD
      */
@@ -116,7 +138,7 @@ public class Ancestor{
     /**
      * Initialize the GenealogyTree with data
      * from the specified file.
-     * 
+     *
      * @param filename is the name of a file with (professor-&gt;student) research pairs
      * @return true iff if the file was read successfully
      */
@@ -130,8 +152,8 @@ public class Ancestor{
         return true;
     }
 
-    /** 
-     * THE MAIN METHOD THAT STARTS THE APPLICATION 
+    /**
+     * THE MAIN METHOD THAT STARTS THE APPLICATION
      * DO NOT CHANGE THIS METHOD
      * @param args Command Line arguments used for file name of genealogy data
      */

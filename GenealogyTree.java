@@ -85,6 +85,7 @@ public class GenealogyTree{
 			st.pop();
 		    }
 		}
+
 	    } return st;
 	}
 		// if current node is not null

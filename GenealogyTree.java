@@ -169,17 +169,24 @@ public class GenealogyTree{
 	    String[] parts;
 	    for (String s : queue) {
 		Scanner sc = new Scanner(filename);
-		while (in.hasNext()) {
+		while (sc.hasNext()) {
 		    line = in.nextLine();
 		    line = line.trim();
-		    for (String s : parts) {
+		    try {
+			for (String s : parts) {
 
+			}
+			if (root == null) {
+			    root.addChild(line);
+			    queue.enqueue(data);
+
+			} else {
+			    TreeNode<T>
+				}
+		    } catch (IOException e) {
+			System.out.println(LOAD_GENEALOGY_ERROR_MESSAGE);
 		    }
-		    if (root == null) {
-			root.addChild(line);
-
-
-		    }
+		    sc.close();
 		}
 	    }
 		// Create a queue, add each new node to the queue

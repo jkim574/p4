@@ -71,7 +71,7 @@ public class GenealogyTree{
 	private StackADT<String> getAncestorStack(StackADT<String> st, TreeNode<String> curr, String target) {
 		// TODO: must implement this method
 	    if (curr != null) {
-	        st.push();
+	        st.push(curr);
 		if (st.peek().equals(children)) {
 		    return st;
 		} else {
@@ -79,15 +79,13 @@ public class GenealogyTree{
 		}
 		for (String cur : st) {
 		    root.getChildren();
-		    if (root.addChild(target)) {
+		    if (root.getData().equals(target)) {
 			return st;
 		    } else {
 			st.pop();
 		    }
 		}
-		return st;
-
-	    }
+	    } return st;
 	}
 		// if current node is not null
 			// push to stack
@@ -95,7 +93,6 @@ public class GenealogyTree{
 				// if curr matches target return stack
 
 			// otherwise, iterate through children
-
 			// for each child
 				// get the ancestor stack for that child
 
@@ -104,7 +101,7 @@ public class GenealogyTree{
 				// otherwise, pop the top from the stack
 
 		// return stack if done processing ch
-	}
+
 
 	/**
 	 * Load a tree from file.
@@ -170,10 +167,10 @@ public class GenealogyTree{
 	    for (String s : queue) {
 		Scanner sc = new Scanner(filename);
 		while (sc.hasNext()) {
-		    line = in.nextLine();
+		    line = sc.nextLine();
 		    line = line.trim();
 		    try {
-			for (String s : parts) {
+			for (String d : parts) {
 
 			}
 			if (root == null) {
@@ -181,7 +178,7 @@ public class GenealogyTree{
 			    queue.enqueue(data);
 
 			} else {
-			    TreeNode<T>
+			    //	    TreeNode<T>
 				}
 		    } catch (IOException e) {
 			System.out.println(LOAD_GENEALOGY_ERROR_MESSAGE);

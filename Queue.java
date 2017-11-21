@@ -24,7 +24,7 @@ public class Queue<T> implements QueueADT<T> {
 	if (data == null) {
 	    throw new IllegalArgumentException();
 	}
-	items.add(items.size() + 1, data);
+	items.add(data);
     }
 
 
@@ -38,7 +38,7 @@ public class Queue<T> implements QueueADT<T> {
 	    throw new EmptyQueueException();
 	}
 	items.remove(0);
-	return items.get(items.size() - 1);
+	return items.get(0);
     }
 
     /**
@@ -50,7 +50,7 @@ public class Queue<T> implements QueueADT<T> {
 	if (this.isEmpty()) {
 	    throw new EmptyQueueException();
 	}
-	return items.get(items.size() - 1);
+	return items.get(0);
     }
 
 }
